@@ -10,22 +10,21 @@ using ConfigManager.UI;
 using HarmonyLib;
 using UnityEngine;
 using UniverseLib.Input;
+using BepInEx.Unity.IL2CPP;
+
 #if UNHOLLOWER
 using UnhollowerRuntimeLib;
 #endif
 #if INTEROP
+
 using Il2CppInterop.Runtime.Injection;
+
 #endif
 
 namespace ConfigManager
 {
     [BepInPlugin(GUID, NAME, VERSION)]
-    public class ConfigManager
-#if MONO
-        : BaseUnityPlugin
-#else
-        : BepInEx.IL2CPP.BasePlugin
-#endif
+    public class ConfigManager : BasePlugin
     {
         public const string GUID = "com.sinai.BepInExConfigManager";
         public const string NAME = "BepInExConfigManager";
@@ -39,12 +38,14 @@ namespace ConfigManager
             Instance.Logger;
 #else
             Instance.Log;
+
 #endif
 
         internal static Harmony Harmony { get; } = new(GUID);
 
         // Internal config
         internal const string CTG_ID = "BepInExConfigManager";
+
         internal static string CTG = "Settings";
         internal static ConfigEntry<KeyCode> Main_Menu_Toggle;
         internal static ConfigEntry<bool> Auto_Save_Configs;
@@ -63,6 +64,7 @@ namespace ConfigManager
             DoUpdate();
         }
 #else
+
         public override void Load()
         {
             Instance = this;
@@ -77,16 +79,19 @@ namespace ConfigManager
 
         public class ManagerBehaviour : MonoBehaviour
         {
-            public ManagerBehaviour(IntPtr ptr) : base(ptr) { }
+            public ManagerBehaviour(IntPtr ptr) : base(ptr)
+            {
+            }
 
             internal void Update()
             {
                 DoUpdate();
             }
         }
+
 #endif
 
-        const string IL2CPP_LIBS_PATH =
+        private const string IL2CPP_LIBS_PATH =
 #if UNHOLLOWER
             "unhollowed"
 #else
@@ -172,10 +177,12 @@ namespace ConfigManager
                 case LogType.Log:
                     LogSource.LogMessage(log);
                     return;
+
                 case LogType.Warning:
                 case LogType.Assert:
                     LogSource.LogWarning(log);
                     return;
+
                 case LogType.Error:
                 case LogType.Exception:
                     LogSource.LogError(log);
@@ -222,23 +229,26 @@ namespace ConfigManager
         //        }
         //    });
 
-        //    string ctg1 = "Category One";
-        //    string ctg2 = "Category Two";
-        //    var file = ConfigManagerPlugin.Instance.Config;
+        // string ctg1 = "Category One"; string ctg2 = "Category Two"; var file =
+        // ConfigManagerPlugin.Instance.Config;
 
-        //    file.Bind(new ConfigDefinition(ctg1, "Advanced setting 1"), true, new ConfigDescription("", null, "Advanced"));
-        //    file.Bind(new ConfigDefinition(ctg1, "Advanced setting 2"), true, new ConfigDescription("", null, 
-        //        new ConfigurationManagerAttributes() { IsAdvanced = true }));
+        // file.Bind(new ConfigDefinition(ctg1, "Advanced setting 1"), true, new
+        // ConfigDescription("", null, "Advanced")); file.Bind(new ConfigDefinition(ctg1, "Advanced
+        // setting 2"), true, new ConfigDescription("", null, new ConfigurationManagerAttributes() {
+        // IsAdvanced = true }));
 
-        //    file.Bind(new ConfigDefinition(ctg1, "ValueList"), "One", new ConfigDescription("",
-        //        new AcceptableValueList<string>("One", "Two", "Three", "Four")));
+        // file.Bind(new ConfigDefinition(ctg1, "ValueList"), "One", new ConfigDescription("", new
+        // AcceptableValueList<string>("One", "Two", "Three", "Four")));
 
-        //    file.Bind(new ConfigDefinition(ctg1, "This is a setting name"), true, new ConfigDescription("This is a description\r\nwith a new line"));
-        //    file.Bind(new ConfigDefinition(ctg1, "Take a byte"), (byte)0xD, new ConfigDescription("Bytes have a max value of 255"));
-        //    file.Bind(new ConfigDefinition(ctg1, "Int slider"), 32, new ConfigDescription("You can use sliders for any number type",
-        //        new AcceptableValueRange<int>(0, 100)));
-        //    file.Bind(new ConfigDefinition(ctg1, "Float slider"), 666.6f, new ConfigDescription("", new AcceptableValueRange<float>(0f, 1000f)));
-        //    file.Bind(new ConfigDefinition(ctg1, "Key binding"), KeyCode.Dollar, new ConfigDescription("Keybinds have a special rebind helper"));
+        // file.Bind(new ConfigDefinition(ctg1, "This is a setting name"), true, new
+        // ConfigDescription("This is a description\r\nwith a new line")); file.Bind(new
+        // ConfigDefinition(ctg1, "Take a byte"), (byte)0xD, new ConfigDescription("Bytes have a max
+        // value of 255")); file.Bind(new ConfigDefinition(ctg1, "Int slider"), 32, new
+        // ConfigDescription("You can use sliders for any number type", new
+        // AcceptableValueRange<int>(0, 100))); file.Bind(new ConfigDefinition(ctg1, "Float
+        // slider"), 666.6f, new ConfigDescription("", new AcceptableValueRange<float>(0f, 1000f)));
+        // file.Bind(new ConfigDefinition(ctg1, "Key binding"), KeyCode.Dollar, new
+        // ConfigDescription("Keybinds have a special rebind helper"));
 
         //    file.Bind(new ConfigDefinition(ctg2, "Enum dropdown"), CameraClearFlags.SolidColor, new ConfigDescription("Enums use a dropdown"));
         //    file.Bind(new ConfigDefinition(ctg2, "Color picker"), Color.magenta, new ConfigDescription("Colors use a special color picker"));

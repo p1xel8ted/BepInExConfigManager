@@ -17,8 +17,12 @@ using UniverseLib.Utility;
 using HarmonyLib;
 using UniverseLib.UI.Panels;
 using System.IO;
+using BepInEx.Unity.IL2CPP;
+
 #if CPP
+
 using BepInEx.IL2CPP;
+
 #endif
 
 namespace ConfigManager.UI
@@ -42,7 +46,9 @@ namespace ConfigManager.UI
 
     internal class EntryInfo
     {
-        public EntryInfo(CachedConfigEntry cached) { Cached = cached; }
+        public EntryInfo(CachedConfigEntry cached)
+        { Cached = cached; }
+
         public CachedConfigEntry Cached { get; }
         public ConfigEntryBase RefEntry;
         public bool IsHidden { get; internal set; }
@@ -54,11 +60,11 @@ namespace ConfigManager.UI
     {
         public static UIManager Instance { get; internal set; }
 
-        static readonly Dictionary<string, ConfigFileInfo> ConfigFiles = new();
-        static readonly Dictionary<ConfigEntryBase, CachedConfigEntry> configsToCached = new();
-        static ConfigFileInfo currentCategory;
+        private static readonly Dictionary<string, ConfigFileInfo> ConfigFiles = new();
+        private static readonly Dictionary<ConfigEntryBase, CachedConfigEntry> configsToCached = new();
+        private static ConfigFileInfo currentCategory;
 
-        static readonly HashSet<CachedConfigEntry> editingEntries = new();
+        private static readonly HashSet<CachedConfigEntry> editingEntries = new();
         internal static ButtonRef saveButton;
 
         internal static UIBase uiBase;
@@ -127,12 +133,12 @@ namespace ConfigManager.UI
             Patcher.ConfigFileCreated += ProcessConfigFile;
         }
 
-        static void ProcessConfigFile(CachedConfigFile cachedConfig)
+        private static void ProcessConfigFile(CachedConfigFile cachedConfig)
         {
             RuntimeHelper.StartCoroutine(DelayedProcess(cachedConfig));
         }
 
-        static IEnumerator DelayedProcess(CachedConfigFile cachedConfig)
+        private static IEnumerator DelayedProcess(CachedConfigFile cachedConfig)
         {
             yield return null;
 
@@ -285,7 +291,7 @@ namespace ConfigManager.UI
                 {
                     string name;
                     try { name = Path.GetFileNameWithoutExtension(configFile.ConfigFilePath); }
-                    catch { name = "UNKNOWN";  }
+                    catch { name = "UNKNOWN"; }
 
                     ConfigManager.LogSource.LogWarning($"Exception setting up category (no meta): {name}\n{ex}");
                 }
@@ -375,7 +381,7 @@ namespace ConfigManager.UI
 
             foreach (EntryInfo entry in currentCategory.Entries)
             {
-                bool val = (string.IsNullOrEmpty(currentFilter) 
+                bool val = (string.IsNullOrEmpty(currentFilter)
                                 || entry.RefEntry.Definition.Key.ToLower().Contains(currentFilter)
                                 || (entry.RefEntry.Description?.Description?.Contains(currentFilter) ?? false))
                            && (!entry.IsHidden || ShowHiddenConfigs);

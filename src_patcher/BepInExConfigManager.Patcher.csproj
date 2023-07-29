@@ -1,13 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <LangVersion>10.0</LangVersion>
-    <PlatformTarget>x64</PlatformTarget>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
-      <Configurations>Release_MONO;Release_IL2CPP;Release_IL2CPP_CoreCLR</Configurations>
-  </PropertyGroup>
+
+	<Import Project="../SteamPath.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<AssemblyName>ConfigManagerPatcher</AssemblyName>
+		<Description>ConfigManagerPatcher</Description>
+		<Version>1.0.0</Version>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<LangVersion>latest</LangVersion>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<Authors>Kumare</Authors>
+		<Configurations>Release_MONO;Release_IL2CPP;Release_IL2CPP_CoreCLR</Configurations>
+	</PropertyGroup>
+	
   <PropertyGroup Condition="'$(Configuration)' == 'Release_Mono'">
     <TargetFramework>net35</TargetFramework>      
     <OutputPath>..\Release\BepInExConfigManager.Mono\patchers\</OutputPath>
@@ -15,13 +22,13 @@
     <AssemblyName>BepInExConfigManager.Mono.Patcher</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release_IL2CPP'">
-      <TargetFramework>net472</TargetFramework>
+      <TargetFramework>net6.0</TargetFramework>
     <OutputPath>..\Release\BepInExConfigManager.Il2Cpp\patchers\</OutputPath>
     <DefineConstants>CPP</DefineConstants>
     <AssemblyName>BepInExConfigManager.Il2Cpp.Patcher</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release_IL2CPP_CoreCLR'">
-      <TargetFramework>net6</TargetFramework>
+      <TargetFramework>net6.0</TargetFramework>
     <OutputPath>..\Release\BepInExConfigManager.Il2Cpp.CoreCLR\patchers\</OutputPath>
     <DefineConstants>CPP</DefineConstants>
     <AssemblyName>BepInExConfigManager.Il2Cpp.Patcher</AssemblyName>
@@ -32,22 +39,22 @@
   <ItemGroup Condition="'$(Configuration)' == 'Release_Mono'">
       <PackageReference Include="Mono.Cecil" Version="0.10.4" />
     <Reference Include="BepInEx">
-      <HintPath>..\lib\BepInEx.dll</HintPath>
+      <HintPath>$(BepInExDir)\core\BepInEx.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)' != 'Release_Mono'">
       <PackageReference Include="Mono.Cecil" Version="0.11.4" />
     <Reference Include="BepInEx.Core">
-      <HintPath>..\lib\BepInEx.Core.dll</HintPath>
+      <HintPath>$(BepInExDir)\core\BepInEx.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="BepInEx.Preloader.Core">
-      <HintPath>..\lib\BepInEx.Preloader.Core.dll</HintPath>
+      <HintPath>$(BepInExDir)\core\BepInEx.Preloader.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="BepInEx.IL2CPP">
-      <HintPath>..\lib\BepInEx.IL2CPP.dll</HintPath>
+      <HintPath>$(BepInExDir)\core\BepInEx.IL2CPP.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
