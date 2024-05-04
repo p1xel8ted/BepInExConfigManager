@@ -29,7 +29,7 @@ namespace ConfigManager
         public const string GUID = "com.sinai.BepInExConfigManager";
         public const string NAME = "BepInExConfigManager";
         public const string AUTHOR = "Sinai";
-        public const string VERSION = "1.3.0";
+        public const string VERSION = "1.4.0";
 
         public static ConfigManager Instance { get; private set; }
 

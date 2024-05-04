@@ -1,6 +1,6 @@
 <Project>
 	<PropertyGroup>
-		<GameDir>C:\Program Files (x86)\Steam\steamapps\common\Gunfire Reborn</GameDir>
+		<GameDir>F:\Games\steamapps\common\Kaze and the Wild Masks</GameDir>
 		<BepInExDir>$(GameDir)\BepInEx</BepInExDir>
 	</PropertyGroup>
 </Project>
